@@ -78,6 +78,10 @@ a {
   color: var(--color-grey-6);
 }
 
+.nav-name a {
+  color: var(--color-grey-6);
+}
+
 .nav-menu a {
   color: var(--color-grey-6);
   font-weight: bold;
