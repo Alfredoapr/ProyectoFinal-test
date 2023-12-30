@@ -4,12 +4,6 @@
     box-sizing: border-box;
 }
 
-:root {
-    --color-bg-calendar: #1b1e22;
-    --color-cell: #e3e3e3;
-    --color-cell-disabled: #424649;
-}
-
 :root{ 
     --color-primary: #FFFFFF;//12233d  original
     --color-secondary: #5cceee;
@@ -23,6 +17,9 @@
     --color-grey-6: #12181b;
     --br-sm-2: 14px;
     --box-shadow-1: 0 3px 15px rgba(0,0,0,.2);
+    --color-bg-calendar: #1b1e22;
+    --color-cell: #e3e3e3;
+    --color-cell-disabled: #424649;
 }
 $colors: #360745, #D61C59, #E7D84B, #EFEAC5, #1B8798;
 
@@ -143,7 +140,10 @@ hr{
     font-size: 4rem;
     font-weight: 700;
 }
-
+.rojo{
+    color: red;
+    font-weight: bold;
+}
 
             /*Calendar*/
 .root {
@@ -158,7 +158,7 @@ hr{
 }
 
 .calendar {
-    padding: 1px 10px; //20 10 
+    padding: 20px 10px; 
     background-color: var(--color-bg-calendar);
     border-radius: 3px;
     width: 100%;
@@ -167,7 +167,7 @@ hr{
 }
 
 .calendar__header {
-    color: white;
+    color: var(--color-white);
     display: flex;
     justify-content: space-between;
     text-transform: uppercase;
@@ -175,7 +175,7 @@ hr{
 }
 
 .calendar .control {
-    color: white;
+    color: var(--color-white);
     font-weight: bold;
     background-color: transparent;
     border: none;
@@ -189,7 +189,7 @@ hr{
 }
 
 .grid__header {
-    color: white;
+    color: var(--color-white);
     margin-bottom: 20px;
 }
 
@@ -210,9 +210,9 @@ hr{
 
 .grid__cell--selected {
     color: var(--color-bg-calendar);
-    background-color: white;
+    background-color: var(--color-white);
     border-radius: 50%;
-    border: 2px solid white;
+    border: 2px solid var(--color-white);
     box-shadow: 0 0 0 2px var(--color-bg-calendar) inset;
 }
 
@@ -220,6 +220,13 @@ hr{
     color: var(--color-cell-disabled);
     cursor: not-allowed;
 }
+
+
+.grid__cell--unavailable{
+    color: red !important;
+    cursor: not-allowed;
+}
+
 
  /*Contact*/
 

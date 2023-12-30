@@ -1,6 +1,7 @@
 class Calendar {
     constructor(id) {
         this.cells = [];
+        this.datesUnavailable = ["Mon Dec 18 2023 00:00:00 GMT-0600 (hora estándar central)", "Thu Dec 14 2023 00:00:00 GMT-0600 (hora estándar central)", "Sun Dec 17 2023 00:00:00 GMT-0600 (hora estándar central)" ];
         this.selectedDate = null;
         this.currentMonth = moment();
         this.elCalendar = document.getElementById(id);
@@ -18,9 +19,9 @@ class Calendar {
     getTemplate() {
         let template = `
             <div class="calendar__header">
-                <button type="button" class="control control--prev">&lt;</button>
-                <span class="month-name">dic 2019</span>
-                <button type="button" class="control control--next">&gt;</button>
+                <button type="button" class="control control--prev"><</button>
+                <span class="month-name">dic 2023</span>
+                <button type="button" class="control control--next">></button>
             </div>
             <div class="calendar__body">
                 <div class="grid">
@@ -75,14 +76,18 @@ class Calendar {
         this.elGridBody.innerHTML = '';
         let templateCells = '';
         let disabledClass = '';
+        let unavailableClass = '';
         for (let i = 0; i < this.cells.length; i++) {
             disabledClass = '';
+            unavailableClass = '';
             if (!this.cells[i].isInCurrentMonth) {
                 disabledClass = 'grid__cell--disabled';
+            }else if(this.cells[i].unavailableDate) {
+                unavailableClass = 'grid__cell--unavailable';
             }
             // <span class="grid__cell grid__cell--gd grid__cell--selected">1</span>
             templateCells += `
-                <span class="grid__cell grid__cell--gd ${disabledClass}" data-cell-id="${i}">
+                <span class="grid__cell grid__cell--gd ${disabledClass} ${unavailableClass}" data-cell-id="${i}">
                     ${this.cells[i].date.date()}
                 </span>
             `;
@@ -93,16 +98,17 @@ class Calendar {
     }
 
     generateDates(monthToShow = moment()) {
-        if (!moment.isMoment(monthToShow)) {
+        if (!moment.isMoment(monthToShow)) {        //verificar que sea un objeto moment
             return null;
         }
-        let dateStart = moment(monthToShow).startOf('month');
-        let dateEnd = moment(monthToShow).endOf('month');
+        let dateStart = moment(monthToShow).startOf('month'); /// el primer día del mese1
+        let dateEnd = moment(monthToShow).endOf('month');       ///obtener el último día del mes
         let cells = [];
+        const datesUnavailable = ["Mon Dec 18 2023 00:00:00 GMT-0600 (hora estándar central)", "Thu Dec 14 2023 00:00:00 GMT-0600 (hora estándar central)", "Sun Dec 17 2023 00:00:00 GMT-0600 (hora estándar central)", "Sat Dec 23 2023 00:00:00 GMT-0600 (hora estándar central)", "Sat Dec 30 2023 00:00:00 GMT-0600 (hora estándar central)", "Sat Jan 06 2024 00:00:00 GMT-0600 (hora estándar central)", "Tue Jan 16 2024 00:00:00 GMT-0600 (hora estándar central)", "Sun Jan 21 2024 00:00:00 GMT-0600 (hora estándar central)", "Sat Jan 27 2024 00:00:00 GMT-0600 (hora estándar central)", "Fri Feb 02 2024 00:00:00 GMT-0600 (hora estándar central)", "Sat Feb 10 2024 00:00:00 GMT-0600 (hora estándar central)", "Sat Feb 24 2024 00:00:00 GMT-0600 (hora estándar central)"];
 
         // Encontrar la primer fecha que se va a mostrar en el calendario
-        while (dateStart.day() !== 1) {
-            dateStart.subtract(1, 'days');
+        while (dateStart.day() !== 1) {  //1 = lunes
+            dateStart.subtract(1, 'days');      //quitar un día a la fecha consultada
         }
 
         // Encontrar la última fecha que se va a mostrar en el calendario
@@ -111,14 +117,24 @@ class Calendar {
         }
 
         // Genera las fechas del grid
+        
         do {
-            cells.push({
-                date: moment(dateStart),
-                isInCurrentMonth: dateStart.month() === monthToShow.month()
-            });
+                cells.push({
+                    date: moment(dateStart),
+                    isInCurrentMonth: dateStart.month() === monthToShow.month(),
+                }); 
             dateStart.add(1, 'days');
-        } while (dateStart.isSameOrBefore(dateEnd));
+            console.log(cells)
+        } while (dateStart.isSameOrBefore(dateEnd)); //
 
+        for(let i = 0; i<35; i++){
+            for(let j = 0; j < datesUnavailable.length; j++){
+                if(cells[i].date._d == datesUnavailable[j]){
+                    cells[i].unavailableDate = "true";
+                }
+                console.log(cells[i]);
+            }    
+        }   
         return cells;
     }
 
@@ -162,8 +178,4 @@ themeBtn.addEventListener('click', () =>{
     element.classList.toggle('dark-mode');
 })
 
-
-ScrollReveal().reveal('.showcase');
-ScrollReveal().reveal('.banner-one' , {delay:300});
-ScrollReveal().reveal('.cards' , {delay:300});
 ScrollReveal().reveal('.contact' , {delay:300});
